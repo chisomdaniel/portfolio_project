@@ -21,7 +21,7 @@ app.config.from_object(DevelopmentConfig)
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
-from app.models import User, RentalListing, Lease, Payment, Review, Message, Chat
+from .models import User, RentalListing, Lease, Payment, Review, Message, Chat
 
 # Initialize the Admin page
 admin = Admin(app, name='Rental Housing Admin', template_mode='bootstrap3')
@@ -75,3 +75,4 @@ if __name__ == '__main__':
     except Exception as exc:
         print(exc)
     app.run(debug=True)
+    
