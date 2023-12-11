@@ -7,15 +7,17 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger
 
-from config import config_by_name
+from sqlalchemy import inspect
+
+from config import DevelopmentConfig
 from dotenv import load_dotenv
 
 load_dotenv() # Load enviroment variables
 
 env = os.environ.get('FLASK_ENV', 'dev')
 
-app = Flask(__name__)
-app.config.from_object(config_by_name[env])
+app = Flask(__name__, instance_relative_config=False)
+app.config.from_object(DevelopmentConfig)
 
 # Initialize SQLAlchemy
 db = SQLAlchemy(app)
@@ -68,5 +70,8 @@ def home():
     )
 
 if __name__ == '__main__':
-    db.create_all()
+    try:
+        db.create_all()
+    except Exception as exc:
+        print(exc)
     app.run(debug=True)

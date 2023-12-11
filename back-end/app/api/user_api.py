@@ -41,9 +41,10 @@ class UserListResource(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('username', type=str, required=True, help='Username is required')
         parser.add_argument('email', type=str, required=True, help='Email is required')
+        parser.add_argument('password', type=str, required=True, help='Email is required')
         args = parser.parse_args()
 
-        new_user = User(username=args['username'], email=args['email'])
+        new_user = User(name=args['username'], email=args['email'], password=args['password'])
         db.session.add(new_user)
         db.session.commit()
 
