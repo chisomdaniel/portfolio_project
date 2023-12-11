@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -8,6 +8,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger
 
 from config import config_by_name
+from dotenv import load_dotenv
+
+load_dotenv() # Load enviroment variables
 
 env = os.environ.get('FLASK_ENV', 'dev')
 
@@ -54,6 +57,15 @@ api.add_resource(ReviewResource, '/review')
 api.add_resource(MessageResource, '/message')
 api.add_resource(ChatResource, '/chat')
 
+# Handle the home route
+@app.route('/')
+def home():
+    return jsonify(
+        {
+            "status": True,
+            "message": "Welcome to Flask API"
+        }
+    )
 
 if __name__ == '__main__':
     db.create_all()

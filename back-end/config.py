@@ -1,16 +1,16 @@
 import os
 
 class Config:
-    SECRET_KEY = 'wgwf24gfefgrgw34eg5y346g5yge'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS', False)
 
 class DevelopmentConfig(Config):
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///your_dev_database.db'
+    DEBUG = os.environ.get('DEBUG', True)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'sqlite:///dev_database.db')
 
 class ProductionConfig(Config):
-    DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')  # Replace with your production database URL
+    DEBUG = os.environ.get('DEBUG', False)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 config_by_name = dict(
     dev=DevelopmentConfig,
