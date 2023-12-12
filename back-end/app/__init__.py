@@ -1,78 +1,96 @@
 import os
+import bcrypt
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Api
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
-from flasgger import Swagger
-
-from sqlalchemy import inspect
+from flasgger import Swagger, swag_from
+from flask_jwt_extended import JWTManager
 
 from config import DevelopmentConfig
 from dotenv import load_dotenv
 
-load_dotenv() # Load enviroment variables
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
-env = os.environ.get('FLASK_ENV', 'dev')
+load_dotenv()  # Load environment variables
 
-app = Flask(__name__, instance_relative_config=False)
-app.config.from_object(DevelopmentConfig)
+db = SQLAlchemy()
+swagger = Swagger()
+api = Api()
+admin = Admin()
+jwt = JWTManager()
 
-# Initialize SQLAlchemy
-db = SQLAlchemy(app)
-from .models import User, RentalListing, Lease, Payment, Review, Message, Chat
+def init_app():
+    """Creating the core app"""
 
-# Initialize the Admin page
-admin = Admin(app, name='Rental Housing Admin', template_mode='bootstrap3')
+    app = Flask(__name__)
+    app.config.from_object(DevelopmentConfig)
 
-# Add views for each model to the admin page
-admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(RentalListing, db.session))
-admin.add_view(ModelView(Lease, db.session))
-admin.add_view(ModelView(Payment, db.session))
-admin.add_view(ModelView(Review, db.session))
-admin.add_view(ModelView(Message, db.session))
-admin.add_view(ModelView(Chat, db.session))
+    # Initialize SQLAlchemy
+    db.init_app(app)
+    swagger.init_app(app)
+    api.init_app(app)
+    admin.init_app(app)
+    jwt.init_app(app)
 
-# Initialize Swagger
-swagger = Swagger(app)
+    with app.app_context():
+        from .models import User, RentalListing, Lease, Payment, Review, Message, Chat
 
-# Import and add your API views
-from app.api.user_api import UserResource
-from app.api.user_api import UserListResource
-from app.api.rental_listing_api import RentalListingResource
-from app.api.lease_api import LeaseResource
-from app.api.payment_api import PaymentResource
-from app.api.review_api import ReviewResource
-from app.api.message_api import MessageResource
-from app.api.chat_api import ChatResource
+        # Initialize the Admin page
 
-api = Api(app)
+        # Add views for each model to the admin page
+        admin.add_view(ModelView(User, db.session))
+        admin.add_view(ModelView(RentalListing, db.session))
+        admin.add_view(ModelView(Lease, db.session))
+        admin.add_view(ModelView(Payment, db.session))
+        admin.add_view(ModelView(Review, db.session))
+        admin.add_view(ModelView(Message, db.session))
+        admin.add_view(ModelView(Chat, db.session))
 
-api.add_resource(UserResource, '/user')
-api.add_resource(UserListResource, '/users')
-api.add_resource(RentalListingResource, '/rental-listing')
-api.add_resource(LeaseResource, '/lease')
-api.add_resource(PaymentResource, '/payment')
-api.add_resource(ReviewResource, '/review')
-api.add_resource(MessageResource, '/message')
-api.add_resource(ChatResource, '/chat')
+        # Handle the home route
+        @app.route('/')
+        @swag_from('../static/swagger/home_get.yml')
+        def home():
+            return jsonify(
+                {
+                    "status": True,
+                    "message": "Welcome to Flask API"
+                }
+            )
 
-# Handle the home route
-@app.route('/')
-def home():
-    return jsonify(
-        {
-            "status": True,
-            "message": "Welcome to Flask API"
-        }
-    )
+
+        # Your existing User model and db initialization code
+
+        @app.route('/login', methods=['POST'])
+        @swag_from('../static/swagger/login.yml')
+        def login():
+            data = request.get_json()
+            email = data.get('email')
+            password = data.get('password')
+
+            user = User.query.filter_by(email=email).first()
+
+            try:
+                password_correct = bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8'))
+            except Exception as exc:
+                return jsonify({
+                    "message": "Invalid credentials",
+                    "error": str(exc)
+                })
+
+            if user and password_correct:
+                access_token = create_access_token(identity=user.id)
+                return jsonify(access_token=access_token), 200
+            else:
+                return jsonify({"msg": "Invalid credentials"}), 401
+
+        # db.drop_all()
+        db.create_all()
+
+        return app
 
 if __name__ == '__main__':
-    try:
-        db.create_all()
-    except Exception as exc:
-        print(exc)
+    app = init_app()
     app.run(debug=True)
-    
