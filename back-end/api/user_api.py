@@ -44,7 +44,6 @@ class UserResource(Resource):
         return '', 204  # No content
 
 class UserListResource(Resource):
-    @jwt_required()
     @swag_from('../static/swagger/users_get.yml')
     def get(self):
         users = User.query.all()

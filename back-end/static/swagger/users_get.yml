@@ -1,23 +1,10 @@
-userListResourceGet:
-  get:
-    summary: Get a list of users
+class UserListResource(Resource):
+    ---
+    tags:
+        - User API
+    security:
+        - JWT: []
+    parameters: []
     responses:
-      '200':
-        description: Successful operation
-        content:
-          application/json:
-            example:
-              - id: 1
-                name: John Doe
-                email: john@example.com
-                type: tenant
-                timestamps: 2023-01-01T12:00:00Z
-              - id: 2
-                name: Jane Doe
-                email: jane@example.com
-                type: tenant
-                timestamps: 2023-01-02T12:00:00Z
-      '401':
-        $ref: '#/components/responses/UnauthorizedError'
-      '500':
-        $ref: '#/components/responses/InternalServerError'
+        200:
+            description: List of Users Retrieved Successfully

@@ -82,7 +82,10 @@ def init_app():
 
             if user and password_correct:
                 access_token = create_access_token(identity=user.id)
-                return jsonify(access_token=access_token), 200
+                return jsonify({
+                    "access_token": access_token,
+                    "message": "Logged in successfully"
+                    }), 200
             else:
                 return jsonify({"msg": "Invalid credentials"}), 401
 

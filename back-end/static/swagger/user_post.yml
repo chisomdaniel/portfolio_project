@@ -1,39 +1,29 @@
-userListResourcePost:
-  post:
-    summary: Create a new user
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              username:
-                type: string
-                description: Username of the new user
-              email:
-                type: string
-                format: email
-                description: Email of the new user
-              password:
-                type: string
-                description: Password of the new user
-            required:
-              - username
-              - email
-              - password
+class UserListResource(Resource):
+    ---
+    tags:
+        - User API
+    security:
+        - JWT: []
+    parameters:
+        - name: username
+          in: formData
+          type: string
+          required: true
+          description: Username is required
+        - name: email
+          in: formData
+          type: string
+          required: true
+          description: Email is required
+        - name: password
+          in: formData
+          type: string
+          required: true
+          description: Password is required
     responses:
-      '201':
-        description: User created successfully
-        content:
-          application/json:
-            example:
-              id: 3
-              name: New User
-              email: newuser@example.com
-              type: tenant
-              timestamps: 2023-01-03T12:00:00Z
-      '400':
-        $ref: '#/components/responses/BadRequestError'
-      '500':
-        $ref: '#/components/responses/InternalServerError'
+        201:
+            description: User Created Successfully
+        400:
+            description: Bad Request - Missing or Invalid Parameters
+        500:
+            description: Internal Server Error - Error creating user
