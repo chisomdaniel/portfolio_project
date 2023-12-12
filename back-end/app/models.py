@@ -14,6 +14,16 @@ class User(db.Model):
     profile_image = db.Column(db.String(255))
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'type': self.type,
+            'profile_image': self.profile_image,
+            'timestamps': self.timestamps.strftime('%Y-%m-%d %H:%M:%S') if self.timestamps else None
+        }
+
     # # User has many listings
     # listings = relationship('RentalListing', backref='owner', lazy=True)
 
@@ -44,7 +54,7 @@ class RentalListing(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Rental Listing belongs to an owner (User)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Rental Listing has many leases
     # leases = relationship('Lease', backref='listing', lazy=True)
@@ -65,13 +75,13 @@ class Lease(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Lease belongs to a user (renter)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Lease belongs to an owner (User)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Lease belongs to a listing
-    listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
+    # listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
 
     # # Lease has many payments
     # payments = relationship('Payment', backref='lease', lazy=True)
@@ -85,10 +95,10 @@ class Payment(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Payment belongs to a lease
-    lease_id = db.Column(db.Integer, db.ForeignKey('lease.id'), nullable=False)
+    # lease_id = db.Column(db.Integer, db.ForeignKey('lease.id'), nullable=False)
 
     # # Payment has a payer (User)
-    payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
 # Review Model
@@ -100,10 +110,10 @@ class Review(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Review belongs to a user
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Review belongs to a listing
-    listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
+    # listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
 
 
 # Message Model
@@ -112,13 +122,13 @@ class Message(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Message belongs to a chat
-    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
+    # chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
 
     # # Message has a sender (User)
-    sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Message has a recipient (User)
-    recipient = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # recipient = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
 
 # Chat Model
@@ -127,7 +137,7 @@ class Chat(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Chat belongs to a listing
-    listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
+    # listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
 
     # Chat has many messages
     # messages = relationship('Message', backref='chat', lazy=True)

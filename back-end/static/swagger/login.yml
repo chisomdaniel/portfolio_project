@@ -1,0 +1,42 @@
+swagger: '2.0'
+info:
+  title: Flask API Login
+  description: Authenticate user and generate access token
+  version: '1.0.0'
+
+paths:
+  /login:
+    post:
+      summary: User Login
+      description: Authenticate user and generate access token.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: credentials
+          description: User login credentials
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: Successful login
+          schema:
+            type: object
+            properties:
+              access_token:
+                type: string
+        401:
+          description: Invalid credentials
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
