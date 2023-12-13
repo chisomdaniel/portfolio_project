@@ -1,0 +1,47 @@
+Update a user by ID
+---
+  tags:
+    - User Resource
+  summary: Update user by ID
+  parameters:
+    - name: user_id
+      in: path
+      required: true
+      description: ID of the user to update
+      type: integer
+    - name: username
+      in: formData
+      type: string
+      description: New username
+    - name: email
+      in: formData
+      type: string
+      description: New email
+    - name: password
+      in: formData
+      type: string
+      description: New password
+  responses:
+    200:
+      description: Successful operation
+      schema:
+        $ref: '#/definitions/User'
+    404:
+      description: User not found
+
+  definitions:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        type:
+          type: string
+        profile_image:
+          type: string
+        timestamps:
+          type: string

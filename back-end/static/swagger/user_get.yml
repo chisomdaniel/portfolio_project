@@ -1,0 +1,19 @@
+Get a user by ID
+    ---
+      tags:
+        - User Resource
+      summary: Get user by ID
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: ID of the user to get
+          type: integer
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: User not found
+

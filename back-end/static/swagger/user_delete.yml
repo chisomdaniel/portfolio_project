@@ -1,0 +1,16 @@
+Delete a user by ID
+---
+  tags:
+    - User Resource
+  summary: Delete user by ID
+  parameters:
+    - name: user_id
+      in: path
+      required: true
+      description: ID of the user to delete
+      type: integer
+  responses:
+    204:
+      description: No content
+    404:
+      description: User not found

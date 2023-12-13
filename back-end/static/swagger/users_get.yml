@@ -1,4 +1,4 @@
-class UserListResource(Resource):
+Get a list of all users
     ---
     tags:
         - User API

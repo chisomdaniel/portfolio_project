@@ -1,4 +1,4 @@
-/login:
+Login a user
   ---
     tags:
         - Authentication API

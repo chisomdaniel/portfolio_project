@@ -8,6 +8,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger, swag_from
 from flask_jwt_extended import JWTManager
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 from config import DevelopmentConfig
 from dotenv import load_dotenv
@@ -21,6 +22,7 @@ swagger = Swagger()
 api = Api()
 admin = Admin()
 jwt = JWTManager()
+photos = UploadSet("photos", IMAGES)
 
 def init_app():
     """Creating the core app"""
@@ -34,6 +36,7 @@ def init_app():
     api.init_app(app)
     admin.init_app(app)
     jwt.init_app(app)
+    configure_uploads(app, photos)
 
     with app.app_context():
         from .models import User, RentalListing, Lease, Payment, Review, Message, Chat

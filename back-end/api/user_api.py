@@ -10,11 +10,13 @@ from app import db
 import bcrypt
 
 class UserResource(Resource):
+    @swag_from('../static/swagger/user_get.yml')
     def get(self, user_id):
         user = User.query.get_or_404(user_id)
         
         return jsonify(user.serialize())
 
+    @swag_from('../static/swagger/user_put.yml')
     def put(self, user_id):
         parser = reqparse.RequestParser()
         parser.add_argument('username', type=str)
@@ -37,6 +39,7 @@ class UserResource(Resource):
 
         return jsonify(user.serialize())
 
+    @swag_from('../static/swagger/user_delete.yml')
     def delete(self, user_id):
         user = User.query.get_or_404(user_id)
         db.session.delete(user)
@@ -49,26 +52,30 @@ class UserListResource(Resource):
         users = User.query.all()
         return jsonify([user.serialize() for user in users])
 
-    @swag_from('../static/swagger/user_post.yml')
+    @swag_from('../static/swagger/users_post.yml')
     def post(self):
+
         try:
-            parser = reqparse.RequestParser()
+            parser = reqparse.RequestParser() # Formats and Validates the request
             parser.add_argument('username', type=str, required=True, help='Username is required')
             parser.add_argument('email', type=str, required=True, help='Email is required')
             parser.add_argument('password', type=str, required=True, help='Email is required')
             args = parser.parse_args()
 
             password_text = args['password']
+        
             hashed_pw = bcrypt.hashpw(password_text.encode('utf-8'), bcrypt.gensalt())
 
             new_user = User(name=args['username'], email=args['email'], password=hashed_pw, type="tenant")
             db.session.add(new_user)
             db.session.commit()
 
-            return jsonify(new_user.serialize()), 201  # Created
-        except Exception as exc:
             return jsonify({
+                "message": f"User {new_user.email} created successfully"
+            })
+        except Exception as exc:
+            return {
                 "error": str(exc),
                 "message": "Error creating user"
-            })
+            }
 

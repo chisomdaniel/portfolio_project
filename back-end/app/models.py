@@ -25,7 +25,7 @@ class User(db.Model):
         }
 
     # # User has many listings
-    # listings = relationship('RentalListing', backref='owner', lazy=True)
+    listings = relationship('RentalListing', backref='owner', lazy=True)
 
     # # User has many leases
     # leases = relationship('Lease', backref='user', lazy=True)
@@ -54,7 +54,7 @@ class RentalListing(db.Model):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Rental Listing belongs to an owner (User)
-    # owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Rental Listing has many leases
     # leases = relationship('Lease', backref='listing', lazy=True)
