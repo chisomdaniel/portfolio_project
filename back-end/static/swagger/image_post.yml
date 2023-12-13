@@ -1,0 +1,19 @@
+Upload an image
+---
+  tags:
+    - Image API
+  security:
+    - JWT: []
+  parameters:
+    - name: photo
+      in: formData
+      type: file
+      required: true
+      description: Image to upload
+  responses:
+    201:
+      description: Image Uploaded Successfully
+    400:
+      description: Bad Request - Missing or Invalid Parameters
+    500:
+      description: Internal Server Error - Error uploading image

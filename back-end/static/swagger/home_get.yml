@@ -1,21 +1,19 @@
-swagger: '2.0'
-info:
-  title: Flask API Home
-  description: Welcome to Flask API
-  version: '1.0.0'
-
-paths:
-  /:
-    get:
-      summary: Home Route
-      description: Returns a welcome message.
-      responses:
-        200:
-          description: Successful response
+API Health Check
+  ---
+  tags:
+      - Home API
+  description: Returns a welcome message for the Flask API home route
+  responses:
+      200:
+          description: Welcome message retrieved successfully
           schema:
-            type: object
-            properties:
-              status:
-                type: boolean
-              message:
-                type: string
+              type: object
+              properties:
+                  status:
+                      type: boolean
+                      example: true
+                      description: Status of the response
+                  message:
+                      type: string
+                      example: Welcome to Flask API
+                      description: Welcome message

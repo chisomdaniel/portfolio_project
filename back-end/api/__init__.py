@@ -9,6 +9,7 @@ from .payment_api import PaymentResource
 from .review_api import ReviewResource
 from .message_api import MessageResource
 from .chat_api import ChatResource
+from .image_api import ImageUploadResource
 
 # Import and aapi.add_resource(UserResource, '/user/<int:user_id>')dd your API views
 
@@ -20,3 +21,4 @@ api.add_resource(PaymentResource, '/payment/<int:payment_id>')
 api.add_resource(ReviewResource, '/review/<int:review_id>')
 api.add_resource(MessageResource, '/message/<int:message_id>')
 api.add_resource(ChatResource, '/chat/<int:chat_id>')
+api.add_resource(ImageUploadResource, '/image')

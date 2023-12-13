@@ -1,0 +1,29 @@
+Create a user
+---
+  tags:
+    - User API
+  security:
+    - JWT: []
+  parameters:
+    - name: username
+      in: json
+      type: string
+      required: true
+      description: Username is required
+    - name: email
+      in: json
+      type: string
+      required: true
+      description: Email is required
+    - name: password
+      in: json
+      type: string
+      required: true
+      description: Password is required
+  responses:
+    201:
+      description: User Created Successfully
+    400:
+      description: Bad Request - Missing or Invalid Parameters
+    500:
+      description: Internal Server Error - Error creating user

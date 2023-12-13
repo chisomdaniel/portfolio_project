@@ -3,6 +3,7 @@ import os
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS', False)
+    UPLOADED_PHOTOS_DEST = os.environ.get('UPLOADED_PHOTOS_DEST', '../static/uploads/')
 
 class DevelopmentConfig(Config):
     DEBUG = os.environ.get('DEBUG', True)
