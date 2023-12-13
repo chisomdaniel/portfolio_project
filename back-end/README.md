@@ -3,6 +3,11 @@ This backend is built using Flask to serve the front-end of the rental app.
 
 To run it:
 1. Ensure you have python, pip and MySQL installed on your machine.
+1. Create and activate a Virtual environment (Recommended for clean enviroments).
+```
+python3 -m venv rental-venv # Create Venv
+source rental-venv/bin/activate # On Linux
+```
 1. Get the directory locally and run `pip install -r requirements.txt` to get the dependencies installed locally.
 1. Configure your .env file in the root directory. An example is below:
 ```
@@ -13,8 +18,8 @@ SQLALCHEMY_DATABASE_URI=mysql+pymysql://<username>:<password>@localhost/<databas
 JWT_ACCESS_TOKEN_EXPIRES=86400  # 24 hours in seconds
 UPLOADED_PHOTOS_DEST=static/uploads/
 ```
-1. Run the start script to start the application: `python run.py`
-1. Access the app using `127.0.0.1:5000` on your browser.
+4. Run the start script to start the application: `python run.py`
+5. Access the app using `127.0.0.1:5000` on your browser.
 
 ### Flasgger
 This API is continuously documented using Flasgger(Swagger for flask).
