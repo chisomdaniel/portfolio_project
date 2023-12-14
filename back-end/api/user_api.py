@@ -54,7 +54,6 @@ class UserListResource(Resource):
 
     @swag_from('../static/swagger/users_post.yml')
     def post(self):
-        print('here 0')
         try:
             parser = reqparse.RequestParser() # Formats and Validates the request
             parser.add_argument('name', type=str, required=True, help='Username is required')
