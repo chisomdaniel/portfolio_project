@@ -60,6 +60,7 @@ class UserListResource(Resource):
             parser.add_argument('email', type=str, required=True, help='Email is required')
             parser.add_argument('password', type=str, required=True, help='Email is required')
             parser.add_argument('type', type=str, default='tenant', required=True, help='Type is required')
+            parser.add_argument('profile_image', type=str, required=False, help='Image not provided')
             args = parser.parse_args()
             password_text = args['password']
         
