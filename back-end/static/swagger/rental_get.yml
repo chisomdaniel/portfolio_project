@@ -1,0 +1,20 @@
+Get a listing by ID
+    ---
+      tags:
+        - Rental Listing Resourse
+      summary: Get all available Rental Listing or get a specific listing by passing an ID parameter
+      parameters:
+        - listing_id (optional): RentalListing_id
+          in: path
+          required: false
+          description: ID of the rental listing to get
+          type: integer
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/User'
+        404:
+          description: Rental Listing not found
+        401:
+          description: Unauthorized to perform operation on Rental Listing
