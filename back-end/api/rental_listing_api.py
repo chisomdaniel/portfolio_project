@@ -17,7 +17,7 @@ class RentalListingResource(Resource):
             return jsonify(rental.serialize())
         
         rentals = RentalListing.query.all()
-        return jsonify([rental.serialize for rental in rentals])
+        return jsonify([rental.serialize() for rental in rentals])
     
     @jwt_required()
     @swag_from('../static/swagger/rental_post.yml')
