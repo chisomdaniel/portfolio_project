@@ -25,7 +25,7 @@ class UserResource(Resource):
         args = parser.parse_args()
 
         user = User.query.get_or_404(user_id)
-        
+
         if args['username']:
             user.name = args['username']
         if args['email']:
@@ -54,19 +54,20 @@ class UserListResource(Resource):
 
     @swag_from('../static/swagger/users_post.yml')
     def post(self):
-
         try:
             parser = reqparse.RequestParser() # Formats and Validates the request
-            parser.add_argument('username', type=str, required=True, help='Username is required')
+            parser.add_argument('name', type=str, required=True, help='Username is required')
             parser.add_argument('email', type=str, required=True, help='Email is required')
             parser.add_argument('password', type=str, required=True, help='Email is required')
+            parser.add_argument('type', type=str, default='tenant', required=True, help='Type is required')
+            parser.add_argument('profile_image', type=str, required=False, help='Image not provided')
             args = parser.parse_args()
-
             password_text = args['password']
         
             hashed_pw = bcrypt.hashpw(password_text.encode('utf-8'), bcrypt.gensalt())
+            args['password'] = hashed_pw
 
-            new_user = User(name=args['username'], email=args['email'], password=hashed_pw, type="tenant")
+            new_user = User(**args)
             db.session.add(new_user)
             db.session.commit()
 
