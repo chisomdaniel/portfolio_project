@@ -13,12 +13,12 @@ from .image_api import ImageUploadResource
 
 # Import and aapi.add_resource(UserResource, '/user/<int:user_id>')dd your API views
 
-api.add_resource(UserResource, '/user/<int:user_id>')
-api.add_resource(UserListResource, '/users')
-api.add_resource(RentalListingResource, '/rental-listing/<int:listing_id>')
-api.add_resource(LeaseResource, '/lease/<int:lease_id>')
-api.add_resource(PaymentResource, '/payment/<int:payment_id>')
-api.add_resource(ReviewResource, '/review/<int:review_id>')
-api.add_resource(MessageResource, '/message/<int:message_id>')
-api.add_resource(ChatResource, '/chat/<int:chat_id>')
-api.add_resource(ImageUploadResource, '/image')
+api.add_resource(UserResource, '/user/<int:user_id>', strict_slashes=False)
+api.add_resource(UserListResource, '/users', strict_slashes=False)
+api.add_resource(RentalListingResource, '/rental-listing', '/rental-listing/<int:listing_id>', strict_slashes=False)
+api.add_resource(LeaseResource, '/lease/<int:lease_id>', strict_slashes=False)
+api.add_resource(PaymentResource, '/payment/<int:payment_id>', strict_slashes=False)
+api.add_resource(ReviewResource, '/review/<int:review_id>', strict_slashes=False)
+api.add_resource(MessageResource, '/message/<int:message_id>', strict_slashes=False)
+api.add_resource(ChatResource, '/chat/<int:chat_id>', strict_slashes=False)
+api.add_resource(ImageUploadResource, '/image', strict_slashes=False)
