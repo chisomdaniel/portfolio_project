@@ -3,8 +3,17 @@ from datetime import datetime
 
 from . import db
 
+
+class BaseModel:
+
+    def serialize(self):
+        new_dict = self.__dict__.copy()
+        if new_dict.get('_sa_instance_state', False):
+            del new_dict['_sa_instance_state']
+        return new_dict
+
 # User Model
-class User(db.Model):
+class User(db.Model, BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -14,7 +23,7 @@ class User(db.Model):
     profile_image = db.Column(db.String(255))
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def serialize(self):
+    '''def serialize(self):
         return {
             'id': self.id,
             'name': self.name,
@@ -22,7 +31,7 @@ class User(db.Model):
             'type': self.type,
             'profile_image': self.profile_image,
             'timestamps': self.timestamps.strftime('%Y-%m-%d %H:%M:%S') if self.timestamps else None
-        }
+        }'''
 
     # # User has many listings
     listings = relationship('RentalListing', backref='owner', lazy=True)
@@ -41,7 +50,7 @@ class User(db.Model):
 
 
 # Rental Listing Model
-class RentalListing(db.Model):
+class RentalListing(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     location = db.Column(db.String(255), nullable=False)
@@ -67,7 +76,7 @@ class RentalListing(db.Model):
 
 
 # Lease Model
-class Lease(db.Model):
+class Lease(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     monthly_rent = db.Column(db.Float, nullable=False)
@@ -88,7 +97,7 @@ class Lease(db.Model):
 
 
 # Payment Model
-class Payment(db.Model):
+class Payment(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
     comments = db.Column(db.String(255))
@@ -102,7 +111,7 @@ class Payment(db.Model):
 
 
 # Review Model
-class Review(db.Model):
+class Review(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     stars = db.Column(db.Integer, nullable=False)
@@ -117,7 +126,7 @@ class Review(db.Model):
 
 
 # Message Model
-class Message(db.Model):
+class Message(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -132,7 +141,7 @@ class Message(db.Model):
     
 
 # Chat Model
-class Chat(db.Model):
+class Chat(db.Model, BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
