@@ -10,6 +10,7 @@ from flasgger import Swagger, swag_from
 from flask_jwt_extended import JWTManager
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from datetime import timedelta
+from flask_cors import CORS
 
 from config import DevelopmentConfig
 from dotenv import load_dotenv
@@ -30,6 +31,7 @@ def init_app():
 
     app = Flask(__name__)
     app.config.from_object(DevelopmentConfig)
+    CORS(app, origins='*')
 
     # Initialize SQLAlchemy
     db.init_app(app)
