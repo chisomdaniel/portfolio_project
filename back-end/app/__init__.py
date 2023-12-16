@@ -9,6 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger, swag_from
 from flask_jwt_extended import JWTManager
 from flask_uploads import UploadSet, configure_uploads, IMAGES
+from datetime import timedelta
+from flask_cors import CORS
 
 from config import DevelopmentConfig
 from dotenv import load_dotenv
@@ -29,6 +31,7 @@ def init_app():
 
     app = Flask(__name__)
     app.config.from_object(DevelopmentConfig)
+    CORS(app, origins='*')
 
     # Initialize SQLAlchemy
     db.init_app(app)
@@ -84,7 +87,7 @@ def init_app():
                 })
 
             if user and password_correct:
-                access_token = create_access_token(identity=user.id)
+                access_token = create_access_token(identity=user.id, expires_delta=timedelta(hours=24))
                 return jsonify({
                     "access_token": access_token,
                     "message": "Logged in successfully"

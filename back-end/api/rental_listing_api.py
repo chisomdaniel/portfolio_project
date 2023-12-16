@@ -24,22 +24,31 @@ class RentalListingResource(Resource):
     def post(self):
         '''create  a new listing'''
         try:
+            print('Here one')
             user_id = get_jwt_identity()
             parser = reqparse.RequestParser()
+            print("Here 2", user_id)
             parser.add_argument('name', type=str, required=True, help='Rental name required')
             parser.add_argument('location', type=str, required=True, help='Location required')
-            parser.add_argument('min-rent', type=float, required=True, help='Minimum rent required')
-            parser.add_argument('max-rent', type=float, required=True, help='Maximum rent name required')
+            parser.add_argument('min_rent', type=float, required=True, help='Minimum rent required')
+            parser.add_argument('max_rent', type=float, required=True, help='Maximum rent name required')
             parser.add_argument('rented', type=bool, required=True, help='Rent status required')
-            parser.add_argument('owner_id', type=int, default=user_id, required=True, help='Owner ID required')
+            parser.add_argument('owner_id', type=int, default=user_id, required=False, help='Owner ID required')
             parser.add_argument('images', type=db.JSON, required=False, help='No image added')
             parser.add_argument('latitude', type=float, required=False, help='Latitude not provided')
             parser.add_argument('longitude', type=float, required=False, help='Longitude not provided')
 
+            print('Here 3')
             args = parser.parse_args()
+            print('Here 3-1', args)
             new_rental = RentalListing(**args)
+            print('here 4')
             db.session.add(new_rental)
             db.session.commit()
+
+            return jsonify({
+                "message": f"Rental {new_rental.name} created successfully"
+            })
 
         except Exception as e:
             return {
@@ -56,8 +65,8 @@ class RentalListingResource(Resource):
             parser = reqparse.RequestParser()
             parser.add_argument('name', type=str, required=False, help='Rental name required')
             parser.add_argument('location', type=str, required=False, help='Location required')
-            parser.add_argument('min-rent', type=float, required=False, help='Minimum rent required')
-            parser.add_argument('max-rent', type=float, required=False, help='Maximum rent name required')
+            parser.add_argument('min_rent', type=float, required=False, help='Minimum rent required')
+            parser.add_argument('max_rent', type=float, required=False, help='Maximum rent name required')
             parser.add_argument('rented', type=bool, required=False, help='Rent status required')
             # parser.add_argument('owner_id', type=int, required=False, help='Owner ID required')
             parser.add_argument('images', type=db.JSON, required=False, help='No image added')
@@ -68,11 +77,17 @@ class RentalListingResource(Resource):
 
             listing = RentalListing.query.get_or_404(listing_id)
             if listing.owner_id == user_id:
-                for key, value in listing.items():
-                    setattr(listing, key, value)
+                for key, value in args.items():
+                    if value is not None:
+                        print(key, ':', value)
+                        setattr(listing, key, value)
                 db.session.commit()
             else:
                 abort(401), 'Unauthorized user'
+            
+            return jsonify({
+                "message": f"Rental {listing.name} updated successfully"
+            })
 
         except Exception as e:
             return {
@@ -90,7 +105,7 @@ class RentalListingResource(Resource):
         if listing.owner_id == user_id:
             db.session.delete(listing)
             db.session.commit()
-            return '', 204
+            return "", 204
 
         return abort(401), 'Unauthorized user'
 
