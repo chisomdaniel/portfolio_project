@@ -4,23 +4,33 @@ Update a user by ID
     - User Resource
   summary: Update user by ID
   parameters:
-    - name: user_id
-      in: path
-      required: true
-      description: ID of the user to update
-      type: integer
-    - name: username
-      in: formData
-      type: string
-      description: New username
-    - name: email
-      in: formData
-      type: string
-      description: New email
-    - name: password
-      in: formData
-      type: string
-      description: New password
+      - name: user_id
+        in: path
+        required: true
+        description: ID of the user to update
+        type: integer
+
+      - name: attributes
+        in: body
+        description: User attributes to update
+        required: true
+        schema:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: client
+                    description: User's name
+                    required: true
+                email:
+                    type: string
+                    example: client@gmail.com
+                    description: User's email
+                password:
+                    type: string
+                    example: password123
+                    description: User's password
+
   responses:
     200:
       description: Successful operation

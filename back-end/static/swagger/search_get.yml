@@ -1,0 +1,33 @@
+Search by modelName and Column
+---
+  tags:
+    - 'Search API'
+  summary: 'Search for items in any model'
+  parameters:
+    - name: 'model_name'
+      in: 'path'
+      type: 'string'
+      description: 'Name of the model to search'
+      required: true
+    - name: 'query'
+      in: 'query'
+      type: 'string'
+      description: 'Search query'
+      required: true
+    - name: 'column'
+      in: 'query'
+      type: 'string'
+      description: 'Column to search in'
+  responses:
+    200:
+      description: 'Successful operation'
+      schema:
+        type: 'object'
+        properties:
+          results:
+            type: 'array'
+            items:
+              type: 'object'  # Adjust based on the structure of your serialized objects
+              example: {}
+    404:
+      description: 'Model not found'

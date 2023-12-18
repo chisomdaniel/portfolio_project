@@ -42,7 +42,7 @@ def init_app():
     configure_uploads(app, photos)
 
     with app.app_context():
-        from .models import User, RentalListing, Lease, Payment, Review, Message, Chat
+        from .models import User, RentalListing, Lease, Payment, Review
 
         # Initialize the Admin page
 
@@ -52,8 +52,6 @@ def init_app():
         admin.add_view(ModelView(Lease, db.session))
         admin.add_view(ModelView(Payment, db.session))
         admin.add_view(ModelView(Review, db.session))
-        admin.add_view(ModelView(Message, db.session))
-        admin.add_view(ModelView(Chat, db.session))
 
         # Handle the home route
         @app.route('/')

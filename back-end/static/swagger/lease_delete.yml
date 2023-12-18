@@ -1,0 +1,16 @@
+Delete Lease by ID
+---
+  tags:
+    - 'Lease Resource'
+  summary: 'Delete lease by ID'
+  parameters:
+    - name: 'lease_id'
+      in: 'path'
+      type: 'integer'
+      description: 'ID of the lease to delete'
+      required: true
+  responses:
+    200:
+      description: 'Successful operation'
+    404:
+      description: 'Lease not found'

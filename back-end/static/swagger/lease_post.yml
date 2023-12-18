@@ -1,0 +1,49 @@
+Create a new Lease
+---
+  tags:
+    - 'Lease Resource'
+  summary: 'Create a new lease'
+  parameters:
+    - name: 'new_lease'
+      in: 'body'
+      description: 'New lease data'
+      required: true
+      schema:
+        $ref: '#/definitions/LeaseCreate'
+  responses:
+    201:
+      description: 'Lease created successfully'
+      schema:
+        $ref: '#/definitions/Lease'
+
+  definitions:
+    LeaseCreate:
+      type: 'object'
+      properties:
+        title:
+          type: 'string'
+          description: 'Lease title'
+          required: true
+        monthly_rent:
+          type: 'number'
+          format: 'float'
+          description: 'Monthly rent amount'
+          required: true
+        terms:
+          type: 'string'
+          description: 'Lease terms'
+          required: true
+        status:
+          type: 'boolean'
+          description: 'Lease status (0 = pending, 1 = accepted, 2 = running)'
+          required: true
+        user_id:
+          type: 'integer'
+          format: 'int64'
+          description: 'ID of the user (renter)'
+          required: true
+        listing_id:
+          type: 'integer'
+          format: 'int64'
+          description: 'ID of the listing'
+          required: true

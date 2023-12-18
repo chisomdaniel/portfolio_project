@@ -1,0 +1,40 @@
+Update a Lease given an ID
+---
+  tags:
+    - 'Lease Resource'
+  summary: 'Update lease details by ID'
+  parameters:
+    - name: 'lease_id'
+      in: 'path'
+      type: 'integer'
+      description: 'ID of the lease to update'
+      required: true
+    - name: 'update_data'
+      in: 'body'
+      description: 'Updated lease data'
+      required: true
+      schema:
+        $ref: '#/definitions/LeaseUpdate'
+  responses:
+    200:
+      description: 'Successful operation'
+    404:
+      description: 'Lease not found'
+
+  definitions:
+    LeaseUpdate:
+      type: 'object'
+      properties:
+        title:
+          type: 'string'
+          description: 'Updated lease title'
+        monthly_rent:
+          type: 'number'
+          format: 'float'
+          description: 'Updated monthly rent amount'
+        terms:
+          type: 'string'
+          description: 'Updated lease terms'
+        status:
+          type: 'boolean'
+          description: 'Updated lease status (0 = pending, 1 = accepted, 2 = running)'

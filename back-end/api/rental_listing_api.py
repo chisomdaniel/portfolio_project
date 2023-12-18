@@ -1,6 +1,6 @@
 # rental_listing_api.py
 from flask_restful import Resource, reqparse, abort
-from flask import jsonify
+from flask import jsonify, make_response
 from flasgger import swag_from
 from app.models import RentalListing
 from app import db
@@ -14,49 +14,14 @@ class RentalListingResource(Resource):
         # Your logic to retrieve and return rental listing details
         if listing_id:
             rental = RentalListing.query.get_or_404(listing_id)
-            return jsonify(rental.serialize())
+
+            response_data = {rental.serialize()}
+            response = make_response(jsonify(response_data), 200)
+            return response 
         
-        rentals = RentalListing.query.all()
-        return jsonify([rental.serialize() for rental in rentals])
+        
     
-    @jwt_required()
-    @swag_from('../static/swagger/rental_post.yml')
-    def post(self):
-        '''create  a new listing'''
-        try:
-            print('Here one')
-            user_id = get_jwt_identity()
-            parser = reqparse.RequestParser()
-            print("Here 2", user_id)
-            parser.add_argument('name', type=str, required=True, help='Rental name required')
-            parser.add_argument('location', type=str, required=True, help='Location required')
-            parser.add_argument('min_rent', type=float, required=True, help='Minimum rent required')
-            parser.add_argument('max_rent', type=float, required=True, help='Maximum rent name required')
-            parser.add_argument('rented', type=bool, required=True, help='Rent status required')
-            parser.add_argument('owner_id', type=int, default=user_id, required=False, help='Owner ID required')
-            parser.add_argument('images', type=db.JSON, required=False, help='No image added')
-            parser.add_argument('latitude', type=float, required=False, help='Latitude not provided')
-            parser.add_argument('longitude', type=float, required=False, help='Longitude not provided')
-
-            print('Here 3')
-            args = parser.parse_args()
-            print('Here 3-1', args)
-            new_rental = RentalListing(**args)
-            print('here 4')
-            db.session.add(new_rental)
-            db.session.commit()
-
-            return jsonify({
-                "message": f"Rental {new_rental.name} created successfully"
-            })
-
-        except Exception as e:
-            return {
-                'error': str(e),
-                'message': 'Error creating listing'
-            }
-    
-    @jwt_required()
+    # @jwt_required()
     @swag_from('../static/swagger/rental_put.yml')
     def put(self, listing_id):
         '''create update listing'''
@@ -83,11 +48,13 @@ class RentalListingResource(Resource):
                         setattr(listing, key, value)
                 db.session.commit()
             else:
-                abort(401), 'Unauthorized user'
-            
-            return jsonify({
-                "message": f"Rental {listing.name} updated successfully"
-            })
+                response_data = {"message": "Unauthorized user for this listing."}
+                response = make_response(jsonify(response_data), 401)
+                return response
+
+            response_data = {"message": f"Rental {listing.name} updated successfully"}
+            response = make_response(jsonify(response_data), 200)
+            return response
 
         except Exception as e:
             return {
@@ -95,7 +62,7 @@ class RentalListingResource(Resource):
                 'message': 'Error updating listing'
             }
 
-    @jwt_required()
+    # @jwt_required()
     @swag_from('../static/swagger/rental_delete.yml')
     def delete(self, listing_id):
         '''Delete a listing'''
@@ -105,7 +72,49 @@ class RentalListingResource(Resource):
         if listing.owner_id == user_id:
             db.session.delete(listing)
             db.session.commit()
-            return "", 204
 
-        return abort(401), 'Unauthorized user'
+            response_data = {"message": "Listing deleted successfully"}
+            response = make_response(jsonify(response_data), 204)
+            return response
 
+        response_data = {"message": "User not authorized for this listing"}
+        response = make_response(jsonify(response_data), 401)
+        return response
+
+class RentalListingListResource(Resource):
+    # @jwt_required()
+    @swag_from('../static/swagger/rental_post.yml')
+    def post(self):
+        '''create  a new listing'''
+        try:
+            print('Here one')
+            user_id = get_jwt_identity()
+            parser = reqparse.RequestParser()
+            print("Here 2", user_id)
+            parser.add_argument('name', type=str, required=True, help='Rental name required')
+            parser.add_argument('location', type=str, required=True, help='Location required')
+            parser.add_argument('min_rent', type=float, required=True, help='Minimum rent required')
+            parser.add_argument('max_rent', type=float, required=True, help='Maximum rent name required')
+            parser.add_argument('rented', type=bool, default=False, required=False, help='Rent status required')
+            parser.add_argument('owner_id', type=int, default=user_id, required=False, help='Owner ID required')
+            parser.add_argument('images', type=db.JSON, required=False, help='No image added')
+            parser.add_argument('latitude', type=float, required=False, help='Latitude not provided')
+            parser.add_argument('longitude', type=float, required=False, help='Longitude not provided')
+
+            print('Here 3')
+            args = parser.parse_args()
+            print('Here 3-1', args)
+            new_rental = RentalListing(**args)
+            print('here 4')
+            db.session.add(new_rental)
+            db.session.commit()
+
+            response_data = {"message": f"Rental {new_rental.name} created successfully"}
+            response = make_response(jsonify(response_data), 201)
+            return response
+
+        except Exception as e:
+            return {
+                'error': str(e),
+                'message': 'Error creating listing'
+            }

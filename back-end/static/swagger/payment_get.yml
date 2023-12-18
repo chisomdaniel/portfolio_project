@@ -1,0 +1,39 @@
+Get Payment by ID
+---
+  tags:
+    - 'Payment Resource'
+  summary: 'Retrieve payment details by ID'
+  parameters:
+    - name: 'payment_id'
+      in: 'path'
+      type: 'integer'
+      description: 'ID of the payment to retrieve'
+  responses:
+    200:
+      description: 'Successful operation'
+      schema:
+        $ref: '#/definitions/Payment'
+    404:
+      description: 'Payment not found'
+
+  definitions:
+    Payment:
+      type: 'object'
+      properties:
+        id:
+          type: 'integer'
+          format: 'int64'
+        amount:
+          type: 'number'
+          format: 'float'
+        comments:
+          type: 'string'
+        timestamps:
+          type: 'string'
+          format: 'date-time'
+        lease_id:
+          type: 'integer'
+          format: 'int64'
+        payer_id:
+          type: 'integer'
+          format: 'int64'

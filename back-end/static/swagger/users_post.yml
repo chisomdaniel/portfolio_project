@@ -1,25 +1,35 @@
 Create a user
 ---
   tags:
-    - User API
+    - User Resource
   security:
     - JWT: []
+  consumes:
+      - application/json
+  produces:
+      - application/json
   parameters:
-    - name: username
-      in: json
-      type: string
-      required: true
-      description: Username is required
-    - name: email
-      in: json
-      type: string
-      required: true
-      description: Email is required
-    - name: password
-      in: json
-      type: string
-      required: true
-      description: Password is required
+      - name: attributes
+        in: body
+        description: User attributes to create with
+        required: true
+        schema:
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: client
+                    description: User's name
+                    required: true
+                email:
+                    type: string
+                    example: client@gmail.com
+                    description: User's email
+                password:
+                    type: string
+                    example: password123
+                    description: User's password
+
   responses:
     201:
       description: User Created Successfully

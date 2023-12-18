@@ -1,0 +1,43 @@
+Create a new Review
+---
+  tags:
+    - 'Review API'
+  summary: 'Create a new review'
+  parameters:
+    - name: 'new_review'
+      in: 'body'
+      description: 'New review data'
+      required: true
+      schema:
+        $ref: '#/definitions/ReviewCreate'
+  responses:
+    201:
+      description: 'Review created successfully'
+      schema:
+        $ref: '#/definitions/Review'
+
+  definitions:
+    ReviewCreate:
+      type: 'object'
+      properties:
+        title:
+          type: 'string'
+          description: 'Review title'
+          required: true
+        stars:
+          type: 'integer'
+          description: 'Review stars'
+          required: true
+        body:
+          type: 'string'
+          description: 'Review body'
+        user_id:
+          type: 'integer'
+          format: 'int64'
+          description: 'ID of the user submitting the review'
+          required: true
+        listing_id:
+          type: 'integer'
+          format: 'int64'
+          description: 'ID of the listing associated with the review'
+          required: true
