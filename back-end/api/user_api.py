@@ -32,7 +32,7 @@ class UserResource(Resource):
             "reviews": serialized_reviews,
         })
 
-        response_data = {serialized_user}
+        response_data = serialized_user
         response = make_response(jsonify(response_data), 200)
         return response
 
@@ -58,7 +58,7 @@ class UserResource(Resource):
 
         db.session.commit()
 
-        response_data = {user.serialize()}
+        response_data = user.serialize()
         response = make_response(jsonify(response_data), 200)
 
         return response 
@@ -78,8 +78,9 @@ class UserListResource(Resource):
     def get(self):
         users = User.query.all()
 
-        response_data = {jsonify([user.serialize() for user in users])}
-        response = make_response(jsonify(response_data), 200)
+        response_data = jsonify([user.serialize() for user in users])
+        response = make_response(response_data, 200)
+        print(response)
         return response
 
     @swag_from('../static/swagger/users_post.yml')

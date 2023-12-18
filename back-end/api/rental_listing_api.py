@@ -15,7 +15,7 @@ class RentalListingResource(Resource):
         if listing_id:
             rental = RentalListing.query.get_or_404(listing_id)
 
-            response_data = {rental.serialize()}
+            response_data = rental.serialize()
             response = make_response(jsonify(response_data), 200)
             return response 
         
