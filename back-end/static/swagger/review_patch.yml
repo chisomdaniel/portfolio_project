@@ -1,0 +1,36 @@
+Update review of given ID
+---
+  tags:
+    - 'Review API'
+  summary: 'Update review details by ID'
+  parameters:
+    - name: 'review_id'
+      in: 'path'
+      type: 'integer'
+      description: 'ID of the review to update'
+      required: true
+    - name: 'update_data'
+      in: 'body'
+      description: 'Updated review data'
+      required: true
+      schema:
+        $ref: '#/definitions/ReviewUpdate'
+  responses:
+    200:
+      description: 'Successful operation'
+    404:
+      description: 'Review not found'
+
+  definitions:
+    ReviewUpdate:
+      type: 'object'
+      properties:
+        title:
+          type: 'string'
+          description: 'Updated review title'
+        stars:
+          type: 'integer'
+          description: 'Updated review stars'
+        body:
+          type: 'string'
+          description: 'Updated review body'

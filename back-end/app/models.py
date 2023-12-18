@@ -3,14 +3,21 @@ from datetime import datetime
 
 from . import db
 
-
 class BaseModel:
 
     def serialize(self):
         new_dict = self.__dict__.copy()
+
+        for key, value in new_dict.items():
+            if isinstance(value, datetime):
+                # Serialize datetime objects to string format
+                new_dict[key] = value.strftime('%Y-%m-%d %H:%M:%S')
+
         if new_dict.get('_sa_instance_state', False):
             del new_dict['_sa_instance_state']
+
         return new_dict
+
 
 # User Model
 class User(db.Model, BaseModel):
@@ -37,16 +44,10 @@ class User(db.Model, BaseModel):
     listings = relationship('RentalListing', backref='owner', lazy=True)
 
     # # User has many leases
-    # leases = relationship('Lease', backref='user', lazy=True)
+    leases = relationship('Lease', backref='user', lazy=True)
 
     # # User has many reviews
-    # reviews = relationship('Review', backref='user', lazy=True)
-
-    # # User has many sent messages
-    # sent_messages = relationship('Message', foreign_keys='Message.sender', backref='sender', lazy=True)
-
-    # # User has many received messages
-    # received_messages = relationship('Message', foreign_keys='Message.recipient', backref='recipient', lazy=True)
+    reviews = relationship('Review', backref='user', lazy=True)
 
 
 # Rental Listing Model
@@ -66,13 +67,10 @@ class RentalListing(db.Model, BaseModel):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Rental Listing has many leases
-    # leases = relationship('Lease', backref='listing', lazy=True)
+    leases = relationship('Lease', backref='listing', lazy=True)
 
     # # Rental Listing has many reviews
-    # reviews = relationship('Review', backref='listing', lazy=True)
-
-    # # Rental Listing has many messages (Chat)
-    # chats = relationship('Chat', backref='listing', lazy=True)
+    reviews = relationship('Review', backref='listing', lazy=True)
 
 
 # Lease Model
@@ -82,18 +80,16 @@ class Lease(db.Model, BaseModel):
     monthly_rent = db.Column(db.Float, nullable=False)
     terms = db.Column(db.String(255))
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
+    status = db.Column(db.Boolean, default=0) # 0 = pending, 1 = accepted, 2 = running
 
     # # Lease belongs to a user (renter)
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    # # Lease belongs to an owner (User)
-    # owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Lease belongs to a listing
-    # listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
 
     # # Lease has many payments
-    # payments = relationship('Payment', backref='lease', lazy=True)
+    payments = relationship('Payment', backref='lease', lazy=True)
 
 
 # Payment Model
@@ -104,10 +100,10 @@ class Payment(db.Model, BaseModel):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Payment belongs to a lease
-    # lease_id = db.Column(db.Integer, db.ForeignKey('lease.id'), nullable=False)
+    lease_id = db.Column(db.Integer, db.ForeignKey('lease.id'), nullable=False)
 
     # # Payment has a payer (User)
-    # payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
 # Review Model
@@ -119,35 +115,9 @@ class Review(db.Model, BaseModel):
     timestamps = db.Column(db.DateTime, default=datetime.utcnow)
 
     # # Review belongs to a user
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     # # Review belongs to a listing
-    # listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
+    listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
 
-
-# Message Model
-class Message(db.Model, BaseModel):
-    id = db.Column(db.Integer, primary_key=True)
-    timestamps = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # # Message belongs to a chat
-    # chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
-
-    # # Message has a sender (User)
-    # sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    # # Message has a recipient (User)
-    # recipient = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
-
-# Chat Model
-class Chat(db.Model, BaseModel):
-    id = db.Column(db.Integer, primary_key=True)
-    timestamps = db.Column(db.DateTime, default=datetime.utcnow)
-
-    # Chat belongs to a listing
-    # listing_id = db.Column(db.Integer, db.ForeignKey('rental_listing.id'), nullable=False)
-
-    # Chat has many messages
-    # messages = relationship('Message', backref='chat', lazy=True)
 

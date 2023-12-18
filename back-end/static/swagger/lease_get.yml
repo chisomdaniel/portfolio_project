@@ -1,0 +1,56 @@
+Get Payment by ID
+---
+  tags:
+    - 'Lease Resource'
+  summary: 'Retrieve payment details by ID'
+  parameters:
+    - name: 'lease_id'
+      in: 'path'
+      type: 'integer'
+      description: 'ID of the lease to retrieve'
+  responses:
+    200:
+      description: 'Successful operation'
+      schema:
+        $ref: '#/definitions/Lease'
+    404:
+      description: 'Payment not found'
+
+  definitions:
+    Lease:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique identifier for the lease
+        title:
+          type: string
+          description: Title of the lease
+        monthly_rent:
+          type: number
+          format: float
+          description: Monthly rent amount
+        terms:
+          type: string
+          description: Lease terms
+        timestamps:
+          type: string
+          format: date-time
+          description: Timestamp of when the lease was created
+        status:
+          type: boolean
+          description: Lease status (0 = pending, 1 = accepted, 2 = running)
+        user_id:
+          type: integer
+          format: int64
+          description: ID of the user (renter) associated with the lease
+        listing_id:
+          type: integer
+          format: int64
+          description: ID of the rental listing associated with the lease
+        payments:
+          type: array
+          items:
+            $ref: '#/definitions/Payment'
+          description: List of payments associated with the lease

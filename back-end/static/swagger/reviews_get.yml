@@ -1,0 +1,13 @@
+Get all reviews
+---
+  tags:
+    - 'Review API'
+  summary: 'Retreive all reviews'
+
+  responses:
+    200:
+      description: 'Successful operation'
+      schema:
+        $ref: '#/definitions/Review'
+    404:
+      description: 'Review not found'
