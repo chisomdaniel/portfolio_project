@@ -20,7 +20,7 @@ class ReviewResource(Resource):
         # Serialize the review data 
         serialized_review = review.serialize()
 
-        response_data = {serialized_review}
+        response_data = serialized_review
         response = make_response(jsonify(response_data), 200)
         return response
 
@@ -99,7 +99,7 @@ class ReviewListingResource(Resource):
         # Serialize the review data
         serialized_review = review.serialize()
 
-        response_data = {serialized_review}
+        response_data = serialized_review
         response = make_response(jsonify(response_data), 200)
 
         return response

@@ -1,0 +1,49 @@
+Create a new listing
+---
+tags:
+  - Rental Listing Resourse
+summary: Create a new listing
+parameters:
+  - name: rental_data
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Rental name required
+        location:
+          type: string
+          description: Location required
+        min_rent:
+          type: number
+          description: Minimum rent required
+        max_rent:
+          type: number
+          description: Maximum rent required
+        rented:
+          type: boolean
+          description: Rent status
+        owner_id:
+          type: integer
+          description: Owner ID
+        images:
+          type: array
+          items:
+            type: string
+          description: Images
+        latitude:
+          type: number
+          description: Latitude
+        longitude:
+          type: number
+          description: Longitude
+
+responses:
+  201:
+    description: Rental Listing Created Successfully
+  400:
+    description: Bad Request - Missing or Invalid Parameters
+  500:
+    description: Error creating listing

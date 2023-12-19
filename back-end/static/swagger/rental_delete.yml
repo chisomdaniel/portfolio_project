@@ -1,0 +1,18 @@
+Delete a rental listing by ID
+---
+tags:
+  - Rental Listing Resourse
+summary: Delete a rental listing
+parameters:
+  - name: listing_id
+    in: path
+    type: integer
+    required: true
+    description: ID of the Rental Listing to be deleted
+responses:
+  204:
+    description: Rental Listing Deleted Successfully
+  401:
+    description: User not authorized for this listing
+  404:
+    description: Rental Listing Not Found

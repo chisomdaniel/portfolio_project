@@ -1,0 +1,53 @@
+Update a rental listing by ID
+---
+tags:
+  - Rental Listing Resourse
+summary: Update rental listing by ID
+parameters:
+  - name: listing_id
+    in: path
+    type: integer
+    required: true
+    description: ID of the Rental Listing to be updated
+  - name: rental_data
+    in: body
+    required: true
+    schema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Updated Rental name
+        location:
+          type: string
+          description: Updated Location
+        min_rent:
+          type: number
+          description: Updated Minimum rent
+        max_rent:
+          type: number
+          description: Updated Maximum rent
+        rented:
+          type: boolean
+          description: Updated Rent status
+        images:
+          type: array
+          items:
+            type: string
+          description: Updated Images
+        latitude:
+          type: number
+          description: Updated Latitude
+        longitude:
+          type: number
+          description: Updated Longitude
+
+responses:
+  200:
+    description: Rental Listing Updated Successfully
+  401:
+    description: User not authorized for this listing
+  404:
+    description: Rental Listing Not Found
+  500:
+    description: Error updating listing

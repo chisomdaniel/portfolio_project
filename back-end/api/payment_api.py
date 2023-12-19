@@ -12,7 +12,7 @@ class PaymentResource(Resource):
     def get(self, payment_id):
         if payment_id:
             payment = Payment.query.get_or_404(payment_id)
-            response_data = {payment.serialize()}
+            response_data = payment.serialize()
             response = make_response(jsonify(response_data), 200)
 
             return response
@@ -106,6 +106,6 @@ class PaymentListResource(Resource):
     def get(self):
         payments = Payment.query.all()
 
-        response_data = {[payment.serialize() for payment in payments]}
+        response_data = [payment.serialize() for payment in payments]
         response = make_response(jsonify(response_data), 200)
         return response
