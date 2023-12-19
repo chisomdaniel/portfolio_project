@@ -1,0 +1,12 @@
+Get all listings
+---
+tags:
+  - Rental Listing Resourse
+summary: Get all available Rental Listings
+responses:
+  200:
+    description: Rental Listing Details Retrieved Successfully
+    schema:
+      $ref: '#/definitions/RentalListing'
+  404:
+    description: Rental Listing Not Found

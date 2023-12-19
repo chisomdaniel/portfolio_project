@@ -4,11 +4,10 @@ Get a listing by ID
         - Rental Listing Resourse
       summary: Get all available Rental Listing or get a specific listing by passing an ID parameter
       parameters:
-        - listing_id (optional): RentalListing_id
-          in: path
-          required: false
-          description: ID of the rental listing to get
-          type: integer
+        - name: 'listing_id'
+          in: 'path'
+          type: 'integer'
+          description:  ID of the rental listing to get
       responses:
         200:
           description: Successful operation

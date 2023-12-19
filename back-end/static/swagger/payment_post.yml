@@ -1,32 +1,34 @@
 Create a New Payment
 ---
-  tags:
-    - 'Payment Resource'
-  summary: 'Create a new payment'
-  parameters:
-    - name: 'amount'
-      in: 'formData'
-      type: 'number'
-      format: 'float'
-      description: 'Payment amount'
-      required: true
-    - name: 'comments'
-      in: 'formData'
-      type: 'string'
-      description: 'Payment comments'
-    - name: 'lease_id'
-      in: 'formData'
-      type: 'integer'
-      format: 'int64'
-      description: 'ID of the associated lease'
-      required: true
-    - name: 'payer_id'
-      in: 'formData'
-      type: 'integer'
-      format: 'int64'
-      description: 'ID of the payer (User)'
-  responses:
-    201:
-      description: 'Payment created successfully'
-      schema:
-        $ref: '#/definitions/Payment'
+tags:
+  - 'Payment Resource'
+summary: 'Create a new payment'
+consumes:
+  - application/json
+parameters:
+  - name: 'payment_data'
+    in: 'body'
+    required: true
+    schema:
+      type: 'object'
+      properties:
+        amount:
+          type: 'number'
+          format: 'float'
+          description: 'Payment amount'
+        comments:
+          type: 'string'
+          description: 'Payment comments'
+        lease_id:
+          type: 'integer'
+          format: 'int64'
+          description: 'ID of the associated lease'
+        payer_id:
+          type: 'integer'
+          format: 'int64'
+          description: 'ID of the payer (User)'
+responses:
+  201:
+    description: 'Payment created successfully'
+    schema:
+      $ref: '#/definitions/Payment'

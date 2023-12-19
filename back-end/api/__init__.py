@@ -3,7 +3,7 @@ from flask_restful import Api
 api = Api()
 
 from .user_api import UserResource, UserListResource
-from .rental_listing_api import RentalListingResource
+from .rental_listing_api import RentalListingResource, RentalListingListResource
 from .lease_api import LeaseResource, LeaseListResource
 from .payment_api import PaymentResource, PaymentListResource
 from .review_api import ReviewResource, ReviewListingResource
@@ -15,7 +15,9 @@ from .search_api import SearchResource
 api.add_resource(UserResource, '/user/<int:user_id>', strict_slashes=False)
 api.add_resource(UserListResource, '/users', strict_slashes=False)
 
-api.add_resource(RentalListingResource, '/rental-listing/<int:listing_id>',  '/rental-listings', strict_slashes=False)
+api.add_resource(RentalListingResource, '/rental-listing/<int:listing_id>', strict_slashes=False)
+api.add_resource(RentalListingListResource,  '/rental-listings', strict_slashes=False)
+
 
 api.add_resource(LeaseResource, '/lease/<int:lease_id>', strict_slashes=False)
 api.add_resource(LeaseListResource, '/leases', strict_slashes=False)
